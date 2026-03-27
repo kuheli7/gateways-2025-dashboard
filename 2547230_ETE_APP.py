@@ -143,11 +143,18 @@ def show_key_insights(df: pd.DataFrame) -> None:
 def show_feedback_samples(df: pd.DataFrame) -> None:
     if df.empty: return
     st.markdown("### Sample Participant Feedback\n")
-    c1, c2 = st.columns(2)
+    c1, c2, c3, c4 = st.columns(4)
     sents = c1.multiselect("Filter by Sentiment:", ["Positive", "Neutral", "Needs Improvement"])
-    query = c2.text_input("Search Feedback via Keywords:")
-    view = df[df["Feedback Sentiment"].isin(sents)] if sents else df.copy()
+    events = c2.multiselect("Filter by Event:", sorted(df["Event Name"].unique()))
+    ratings = c3.multiselect("Filter by Rating:", sorted(df["Rating"].unique()))
+    query = c4.text_input("Search Keywords:")
+    
+    view = df.copy()
+    if sents: view = view[view["Feedback Sentiment"].isin(sents)]
+    if events: view = view[view["Event Name"].isin(events)]
+    if ratings: view = view[view["Rating"].isin(ratings)]
     if query: view = view[view["Feedback on Fest"].str.contains(query, case=False, na=False)]
+    
     st.dataframe(view[["Student Name", "College", "Event Name", "Rating", "Feedback on Fest", "Feedback Sentiment"]].head(15), use_container_width=True, hide_index=True)
 
 def main() -> None:
