@@ -142,7 +142,7 @@ def show_key_insights(df: pd.DataFrame) -> None:
 
 def show_feedback_samples(df: pd.DataFrame) -> None:
     if df.empty: return
-    st.markdown("### Sample Participant Feedback\n")
+    st.markdown("### Participant Feedback\n")
     c1, c2, c3, c4 = st.columns(4)
     sents = c1.multiselect("Filter by Sentiment:", ["Positive", "Neutral", "Needs Improvement"])
     events = c2.multiselect("Filter by Event:", sorted(df["Event Name"].unique()))
@@ -155,7 +155,7 @@ def show_feedback_samples(df: pd.DataFrame) -> None:
     if ratings: view = view[view["Rating"].isin(ratings)]
     if query: view = view[view["Feedback on Fest"].str.contains(query, case=False, na=False)]
     
-    st.dataframe(view[["Student Name", "College", "Event Name", "Rating", "Feedback on Fest", "Feedback Sentiment"]].head(15), use_container_width=True, hide_index=True)
+    st.dataframe(view[["Student Name", "College", "Event Name", "Rating", "Feedback on Fest", "Feedback Sentiment"]], use_container_width=True, hide_index=True)
 
 def main() -> None:
     st.markdown('<style>[data-testid="stSidebar"] { background-color: #F4FBFB; }</style>', unsafe_allow_html=True)
